@@ -2,20 +2,18 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
 )
 
 type vector struct {
-	pair
+	X int
+	Y int
 }
 
 type point struct {
-	pair
-}
-
-type pair struct {
 	X int
 	Y int
 }
@@ -43,14 +41,14 @@ func readfileVectors(filename string) []vector {
 		value, _ := strconv.Atoi(instruction[1])
 
 		if instruction[0] == "D" {
-			vectors = append(vectors, vector{pair{X: 0, Y: -1 * value}})
+			vectors = append(vectors, vector{X: 0, Y: -1 * value})
 		} else if instruction[0] == "U" {
-			vectors = append(vectors, vector{pair{X: 0, Y: value}})
+			vectors = append(vectors, vector{X: 0, Y: value})
 
 		} else if instruction[0] == "L" {
-			vectors = append(vectors, vector{pair{X: -1 * value, Y: 0}})
+			vectors = append(vectors, vector{X: -1 * value, Y: 0})
 		} else if instruction[0] == "R" {
-			vectors = append(vectors, vector{pair{X: value, Y: 0}})
+			vectors = append(vectors, vector{X: value, Y: 0})
 		}
 	}
 	return vectors
@@ -58,6 +56,8 @@ func readfileVectors(filename string) []vector {
 
 func main() {
 	filename := "input.txt"
-	readfileVectors(filename)
-
+	vectors := readfileVectors(filename)
+	for _, vector := range vectors {
+		fmt.Println(vector)
+	}
 }
