@@ -18,8 +18,58 @@ type point struct {
 	Y int
 }
 
-func move(direction string, amount int) {
+func (p *point) sameRow(other *point) bool {
+	return p.X == other.X
+}
+func (p *point) sameColumn(other *point) bool {
+	return p.Y == other.Y
+}
 
+func (p *point) adjacent(other *point) bool {
+	return (IntAbs(p.X-other.X) == 1 && IntAbs(p.Y-other.Y) == 1) ||
+		(p.sameColumn(other) && IntAbs(p.Y-other.X) == 1) ||
+		(p.sameRow(other) && IntAbs(p.Y-other.Y) == 0)
+}
+
+func (p *point) add(v vector) *point {
+
+	return &point{
+		X: p.X + v.X,
+		Y: p.Y + v.Y,
+	}
+}
+
+func IntAbs(i int) int {
+	if i < 0 {
+		i *= -1
+	}
+	return i
+}
+
+func move(visitedPoints map[point]int, direction vector, tail, head *point) {
+	head = head.add(direction)
+	for !tail.adjacent(head) {
+		difX := head.X - tail.X
+		difY := head.Y - tail.Y
+		var unitVector vector
+		if !tail.sameRow(head) && !tail.sameColumn(head) {
+			X := difX / IntAbs(difX)
+			Y := difY / IntAbs(difY)
+			unitVector = vector{X, Y}
+			// then move diagonally
+		} else if tail.sameRow(head) {
+			// move the y direction
+			Y := difY / IntAbs(difY)
+			unitVector = vector{0, Y}
+		} else if tail.sameColumn(head) {
+			// move the X direction
+			X := difX / IntAbs(difX)
+			unitVector = vector{X, 0}
+
+		}
+		tail = tail.add(unitVector)
+		visitedPoints[point{tail.X, tail.Y}]++
+	}
 }
 
 func readfileVectors(filename string) []vector {
@@ -56,8 +106,12 @@ func readfileVectors(filename string) []vector {
 
 func main() {
 	filename := "input.txt"
+	visitedPoints := map[point]int{point{0, 0}: 1}
+	tail := point{0, 0}
+	head := point{0, 0}
 	vectors := readfileVectors(filename)
-	for _, vector := range vectors {
-		fmt.Println(vector)
+	for _, v := range vectors {
+		move(visitedPoints, v, &tail, &head)
 	}
+	fmt.Println(len(visitedPoints))
 }
