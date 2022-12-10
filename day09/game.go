@@ -19,16 +19,16 @@ type point struct {
 }
 
 func (p *point) sameRow(other *point) bool {
-	return p.X == other.X
+	return p.Y == other.Y
 }
 func (p *point) sameColumn(other *point) bool {
-	return p.Y == other.Y
+	return p.X == other.X
 }
 
 func (p *point) adjacent(other *point) bool {
 	return (IntAbs(p.X-other.X) == 1 && IntAbs(p.Y-other.Y) == 1) ||
-		(p.sameColumn(other) && IntAbs(p.Y-other.X) == 1) ||
-		(p.sameRow(other) && IntAbs(p.Y-other.Y) == 0)
+		(p.sameColumn(other) && IntAbs(p.Y-other.Y) == 1) ||
+		(p.sameRow(other) && IntAbs(p.X-other.X) == 1)
 }
 
 func (p *point) add(v vector) *point {
@@ -39,6 +39,10 @@ func (p *point) add(v vector) *point {
 	}
 }
 
+func (p *point) equals(other *point) bool {
+	return p.X == other.X && p.Y == other.Y
+}
+
 func IntAbs(i int) int {
 	if i < 0 {
 		i *= -1
@@ -46,22 +50,22 @@ func IntAbs(i int) int {
 	return i
 }
 
-func move(visitedPoints map[point]int, direction vector, tail, head *point) {
+func move(visitedPoints map[point]int, direction vector, tail, head *point) (point, point) {
 	head = head.add(direction)
-	for !tail.adjacent(head) {
-		difX := head.X - tail.X
-		difY := head.Y - tail.Y
+	difX := head.X - tail.X
+	difY := head.Y - tail.Y
+	for !tail.adjacent(head) && !tail.equals(head) {
 		var unitVector vector
 		if !tail.sameRow(head) && !tail.sameColumn(head) {
 			X := difX / IntAbs(difX)
 			Y := difY / IntAbs(difY)
 			unitVector = vector{X, Y}
 			// then move diagonally
-		} else if tail.sameRow(head) {
+		} else if tail.sameColumn(head) {
 			// move the y direction
 			Y := difY / IntAbs(difY)
 			unitVector = vector{0, Y}
-		} else if tail.sameColumn(head) {
+		} else if tail.sameRow(head) {
 			// move the X direction
 			X := difX / IntAbs(difX)
 			unitVector = vector{X, 0}
@@ -70,6 +74,7 @@ func move(visitedPoints map[point]int, direction vector, tail, head *point) {
 		tail = tail.add(unitVector)
 		visitedPoints[point{tail.X, tail.Y}]++
 	}
+	return *head, *tail
 }
 
 func readfileVectors(filename string) []vector {
@@ -94,7 +99,6 @@ func readfileVectors(filename string) []vector {
 			vectors = append(vectors, vector{X: 0, Y: -1 * value})
 		} else if instruction[0] == "U" {
 			vectors = append(vectors, vector{X: 0, Y: value})
-
 		} else if instruction[0] == "L" {
 			vectors = append(vectors, vector{X: -1 * value, Y: 0})
 		} else if instruction[0] == "R" {
@@ -111,7 +115,7 @@ func main() {
 	head := point{0, 0}
 	vectors := readfileVectors(filename)
 	for _, v := range vectors {
-		move(visitedPoints, v, &tail, &head)
+		head, tail = move(visitedPoints, v, &tail, &head)
 	}
 	fmt.Println(len(visitedPoints))
 }
