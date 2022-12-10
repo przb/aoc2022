@@ -3,81 +3,40 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/przb/aoc2022/util"
 	"os"
 	"strconv"
 	"strings"
 )
 
-type vector struct {
-	X int
-	Y int
-}
-
-type point struct {
-	X int
-	Y int
-}
-
-func (p *point) sameRow(other *point) bool {
-	return p.Y == other.Y
-}
-func (p *point) sameColumn(other *point) bool {
-	return p.X == other.X
-}
-
-func (p *point) adjacent(other *point) bool {
-	return (IntAbs(p.X-other.X) == 1 && IntAbs(p.Y-other.Y) == 1) ||
-		(p.sameColumn(other) && IntAbs(p.Y-other.Y) == 1) ||
-		(p.sameRow(other) && IntAbs(p.X-other.X) == 1)
-}
-
-func (p *point) add(v vector) *point {
-
-	return &point{
-		X: p.X + v.X,
-		Y: p.Y + v.Y,
-	}
-}
-
-func (p *point) equals(other *point) bool {
-	return p.X == other.X && p.Y == other.Y
-}
-
-func IntAbs(i int) int {
-	if i < 0 {
-		i *= -1
-	}
-	return i
-}
-
-func move(visitedPoints map[point]int, direction vector, tail, head *point) (point, point) {
-	head = head.add(direction)
+func move(visitedPoints map[util.Point]int, direction util.Vector, tail, head *util.Point) (util.Point, util.Point) {
+	head = head.Add(direction)
 	difX := head.X - tail.X
 	difY := head.Y - tail.Y
-	for !tail.adjacent(head) && !tail.equals(head) {
-		var unitVector vector
-		if !tail.sameRow(head) && !tail.sameColumn(head) {
-			X := difX / IntAbs(difX)
-			Y := difY / IntAbs(difY)
-			unitVector = vector{X, Y}
+	for !tail.Adjacent(head) && !tail.Equals(head) {
+		var unitVector util.Vector
+		if !tail.SameRow(head) && !tail.SameColumn(head) {
+			X := difX / util.IntAbs(difX)
+			Y := difY / util.IntAbs(difY)
+			unitVector = util.Vector{X, Y}
 			// then move diagonally
-		} else if tail.sameColumn(head) {
+		} else if tail.SameColumn(head) {
 			// move the y direction
-			Y := difY / IntAbs(difY)
-			unitVector = vector{0, Y}
-		} else if tail.sameRow(head) {
+			Y := difY / util.IntAbs(difY)
+			unitVector = util.Vector{0, Y}
+		} else if tail.SameRow(head) {
 			// move the X direction
-			X := difX / IntAbs(difX)
-			unitVector = vector{X, 0}
+			X := difX / util.IntAbs(difX)
+			unitVector = util.Vector{X, 0}
 
 		}
-		tail = tail.add(unitVector)
-		visitedPoints[point{tail.X, tail.Y}]++
+		tail = tail.Add(unitVector)
+		visitedPoints[util.Point{tail.X, tail.Y}]++
 	}
 	return *head, *tail
 }
 
-func readfileVectors(filename string) []vector {
+func readfileVectors(filename string) []util.Vector {
 	file, err := os.Open(filename)
 	if err != nil {
 		panic(err)
@@ -90,19 +49,19 @@ func readfileVectors(filename string) []vector {
 		lines = append(lines, filescanner.Text())
 	}
 
-	vectors := make([]vector, 0)
+	vectors := make([]util.Vector, 0)
 	for _, line := range lines {
 		instruction := strings.Split(line, " ")
 		value, _ := strconv.Atoi(instruction[1])
 
 		if instruction[0] == "D" {
-			vectors = append(vectors, vector{X: 0, Y: -1 * value})
+			vectors = append(vectors, util.Vector{X: 0, Y: -1 * value})
 		} else if instruction[0] == "U" {
-			vectors = append(vectors, vector{X: 0, Y: value})
+			vectors = append(vectors, util.Vector{X: 0, Y: value})
 		} else if instruction[0] == "L" {
-			vectors = append(vectors, vector{X: -1 * value, Y: 0})
+			vectors = append(vectors, util.Vector{X: -1 * value, Y: 0})
 		} else if instruction[0] == "R" {
-			vectors = append(vectors, vector{X: value, Y: 0})
+			vectors = append(vectors, util.Vector{X: value, Y: 0})
 		}
 	}
 	return vectors
@@ -110,9 +69,9 @@ func readfileVectors(filename string) []vector {
 
 func main() {
 	filename := "input.txt"
-	visitedPoints := map[point]int{point{0, 0}: 1}
-	tail := point{0, 0}
-	head := point{0, 0}
+	visitedPoints := map[util.Point]int{util.Point{0, 0}: 1}
+	tail := util.Point{0, 0}
+	head := util.Point{0, 0}
 	vectors := readfileVectors(filename)
 	for _, v := range vectors {
 		head, tail = move(visitedPoints, v, &tail, &head)
