@@ -52,10 +52,16 @@ func getElves(lines []string) ([]*elf, error) {
 	return elves, nil
 }
 
-//// sumofFasttestElves returns the sum of the 3 largest elves it would be better if it used a min heap, but oh well
-//func sumofFasttestElves(elves []*elf) int {
-//
-//}
+// sumofFasttestElves returns the sum of the 3 largest elves it would be better if it used a min heap, but oh well
+func sumofFasttestElves(elves []*elf) int {
+	total := 0
+	for i := 0; i < 3; i++ {
+		maxIndex := fattestElf(elves)
+		total += elves[maxIndex].total
+		elves = append(elves[:maxIndex], elves[maxIndex+1:]...)
+	}
+	return total
+}
 
 // fattestElf returns the index of elf with the most total calories
 func fattestElf(elves []*elf) int {
@@ -82,6 +88,7 @@ func HowFatIsTheFastestElf() {
 	}
 
 	maxIndex := fattestElf(elves)
-	fmt.Println(elves[maxIndex].total)
+	fmt.Println("Single fattest Elf: " + strconv.Itoa(elves[maxIndex].total))
 
+	fmt.Println("Top 3 Fattest Elves: " + strconv.Itoa(sumofFasttestElves(elves)))
 }
