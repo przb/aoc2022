@@ -1,7 +1,9 @@
 package main
 
-import "github.com/przb/aoc2022/day01"
+import (
+	"github.com/przb/aoc2022/day02"
+)
 
 func main() {
-	day01.HowFatIsTheFastestElf()
+	day02.TotalPts()
 }

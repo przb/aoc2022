@@ -1,6 +1,7 @@
 package day02
 
 import (
+	"fmt"
 	"github.com/przb/aoc2022/util"
 )
 
@@ -10,6 +11,10 @@ const (
 	losePts = 0
 	tiePts  = 3
 	winPts  = 6
+
+	rockPts     = 1
+	paperPts    = 2
+	scissorsPts = 3
 
 	opponentRock     = "A"
 	opponentPaper    = "B"
@@ -22,7 +27,7 @@ const (
 // Returns the sum of the points you get from choosing rock, paper, or scissors
 func selectionSum() int {
 	sum := 0
-	m := map[string]int{"X": 1, "Y": 2, "Z": 3}
+	m := map[string]int{myRock: rockPts, myPaper: paperPts, myScissors: scissorsPts}
 
 	lines, err := util.ReadTokens(filename)
 	if err != nil {
@@ -66,4 +71,8 @@ func winSum() int {
 	}
 
 	return sum
+}
+
+func TotalPts() {
+	fmt.Println(selectionSum() + winSum())
 }
