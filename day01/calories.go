@@ -52,6 +52,25 @@ func getElves(lines []string) ([]*elf, error) {
 	return elves, nil
 }
 
+//// sumofFasttestElves returns the sum of the 3 largest elves it would be better if it used a min heap, but oh well
+//func sumofFasttestElves(elves []*elf) int {
+//
+//}
+
+// fattestElf returns the index of elf with the most total calories
+func fattestElf(elves []*elf) int {
+	maxIndex := 0
+	maxElf := elves[maxIndex]
+
+	for i, currentElf := range elves {
+		if currentElf.total > maxElf.total {
+			maxElf = currentElf
+			maxIndex = i
+		}
+	}
+	return maxIndex
+}
+
 func HowFatIsTheFastestElf() {
 	lines, err := util.ReadLines(inputDir + inputFilename)
 	if err != nil {
@@ -61,14 +80,8 @@ func HowFatIsTheFastestElf() {
 	if err != nil {
 		panic(err)
 	}
-	max := elves[0].total
 
-	for _, elf := range elves {
-		if elf.total > max {
-			max = elf.total
-		}
-	}
-
-	fmt.Println(max)
+	maxIndex := fattestElf(elves)
+	fmt.Println(elves[maxIndex].total)
 
 }
