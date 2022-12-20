@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	day02.TotalPts()
+	day02.TotalPtsPt2()
 }
