@@ -7,21 +7,23 @@ import (
 
 const (
 	filename = "inputs/input02-1.txt"
+	//filename = "day02/smallExample.txt"
 
 	losePts = 0
 	tiePts  = 3
 	winPts  = 6
 
-	rockPts     = 1
-	paperPts    = 2
-	scissorsPts = 3
-
 	opponentRock     = "A"
 	opponentPaper    = "B"
 	opponentScissors = "C"
-	myRock           = "X"
-	myPaper          = "Y"
-	myScissors       = "Z"
+
+	myRock     = "X"
+	myPaper    = "Y"
+	myScissors = "Z"
+
+	rockPts     = 1
+	paperPts    = 2
+	scissorsPts = 3
 )
 
 // Returns the sum of the points you get from choosing rock, paper, or scissors
@@ -47,6 +49,12 @@ func win(opponentSel, mySel string) bool {
 		(opponentSel == opponentScissors && mySel == myRock)
 }
 
+func tie(opponentSel, mySel string) bool {
+	return (opponentSel == opponentRock && mySel == myRock) ||
+		(opponentSel == opponentPaper && mySel == myPaper) ||
+		(opponentSel == opponentScissors && mySel == myScissors)
+}
+
 // Returns the points you get from the rounds if you win
 func winSum() int {
 
@@ -61,7 +69,7 @@ func winSum() int {
 	}
 
 	for _, line := range lines {
-		if line[0] == line[1] {
+		if tie(line[0], line[1]) {
 			sum += tiePts
 		} else if win(line[0], line[1]) {
 			sum += winPts
