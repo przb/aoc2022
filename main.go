@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/przb/aoc2022/day02"
+	"github.com/przb/aoc2022/day03"
 )
 
 func main() {
-	day02.TotalPtsPt2()
+	day03.GetItems()
 }
