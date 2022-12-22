@@ -42,6 +42,36 @@ func getPriority(s string) int {
 
 }
 
+func findUnion(e1, e2 string) string {
+	badgeCandidates := ""
+	e1Arr := strings.Split(e1, "")
+	for _, letter := range e1Arr {
+		if strings.Contains(e2, letter) && !strings.Contains(badgeCandidates, letter) {
+			badgeCandidates += letter
+		}
+	}
+	return badgeCandidates
+}
+
+func GetBadges() {
+	lines, err := util.ReadLines(filename)
+	if err != nil {
+		panic(err)
+	}
+	total := 0
+
+	for i := 2; i < len(lines); i += 3 {
+		badgeCandidnate := findUnion(lines[i-2], lines[i-1])
+		badgeCandidnate = findUnion(badgeCandidnate, lines[i])
+		if len(badgeCandidnate) != 1 {
+			fmt.Println("no single union found")
+		} else {
+			total += getPriority(badgeCandidnate)
+		}
+	}
+	fmt.Println("total: ", total)
+}
+
 func GetItems() {
 	lines, err := util.ReadLines(filename)
 	if err != nil {

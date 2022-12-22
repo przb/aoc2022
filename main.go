@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	day03.GetItems()
+	day03.GetBadges()
 }
