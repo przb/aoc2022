@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/przb/aoc2022/day03"
+	"github.com/przb/aoc2022/day04"
 )
 
 func main() {
-	day03.GetBadges()
+	day04.NumOverlaps()
 }
