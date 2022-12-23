@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/przb/aoc2022/day05"
+	"github.com/przb/aoc2022/day06"
 )
 
 func main() {
-	day05.TopCrates()
+	day06.NumCharacters()
 }
