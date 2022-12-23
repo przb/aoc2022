@@ -85,8 +85,9 @@ func moveMultipleCrates(stacks *[length][]string, amount, from, to int) {
 
 func printTops(stacks [length][]string) {
 	for _, stack := range stacks {
-		fmt.Println(stack[len(stack)-1])
+		fmt.Printf("%c", stack[len(stack)-1][1])
 	}
+	fmt.Printf("\n")
 }
 
 func TopCrates() {
@@ -95,7 +96,7 @@ func TopCrates() {
 		panic(err)
 	}
 	stacks := parseStart(lines[:8])
-	/*moves := */ performMoves(&stacks, lines[10:])
+	performMoves(&stacks, lines[10:])
 
 	printTops(stacks)
 }
