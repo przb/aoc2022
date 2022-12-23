@@ -65,16 +65,22 @@ func performMoves(stacks *[length][]string, moves []string) {
 		if err != nil {
 			panic(err)
 		}
-		moveCrates(stacks, amount, from-1, to-1)
+		moveMultipleCrates(stacks, amount, from-1, to-1)
 	}
 }
 
-// Moves amount items from the stack indexed at from to the stack indexed at to
+// Moves amount items from the stack indexed at from to the stack indexed at to. Does this one item at a time
 func moveCrates(stacks *[length][]string, amount, from, to int) {
 	for i := 0; i < amount; i++ {
 		stacks[to] = append(stacks[to], stacks[from][len(stacks[from])-1])
 		stacks[from] = stacks[from][:len(stacks[from])-1]
 	}
+}
+
+// Moves amount items from the stack indexed at from to the stack indexed at to. Retians the order of the moved items
+func moveMultipleCrates(stacks *[length][]string, amount, from, to int) {
+	stacks[to] = append(stacks[to], stacks[from][len(stacks[from])-amount:]...)
+	stacks[from] = stacks[from][:len(stacks[from])-amount]
 }
 
 func printTops(stacks [length][]string) {
