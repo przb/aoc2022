@@ -28,9 +28,9 @@ func noDuplicates(s []string) bool {
 	return true
 }
 
-func findIndexOfFirstUniqueString(s []string) int {
-	for i := 4; i < len(s); i++ {
-		substr := s[i-4 : i]
+func findIndexOfFirstUniqueString(s []string, length int) int {
+	for i := length; i < len(s); i++ {
+		substr := s[i-length : i]
 		if noDuplicates(substr) {
 			return i
 		}
@@ -44,5 +44,5 @@ func NumCharacters() {
 		panic(err)
 	}
 	characters := strings.Split(lines[0], "") // there is only one line for this puzzle
-	fmt.Println(findIndexOfFirstUniqueString(characters))
+	fmt.Println(findIndexOfFirstUniqueString(characters, 14))
 }
